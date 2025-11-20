@@ -1,0 +1,88 @@
+:root {
+	--bg: rgba(12, 12, 12, 0.6);
+	--card: rgba(24, 24, 24, 0.8);
+	--text: #e8e8e8;
+	--accent: #4fd1c5;
+	--muted: #9aa3b2;
+}
+
+html, body, #root {
+	height: 100%;
+}
+
+body {
+	font-family: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+	color: var(--text);
+}
+
+.overlay {
+	position: fixed;
+	top: 24px;
+	right: 24px;
+	width: 420px;
+	backdrop-filter: blur(8px);
+	background: var(--bg);
+	border: 1px solid rgba(255,255,255,0.08);
+	border-radius: 12px;
+	padding: 10px;
+	user-select: none;
+}
+
+.pane {
+	background: var(--card);
+	border-radius: 10px;
+	padding: 10px;
+	margin: 6px 0;
+}
+
+.title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: var(--muted);
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.row {
+	display: flex;
+	gap: 10px;
+}
+
+.grow {
+	flex: 1;
+}
+
+.suggest {
+	font-weight: 600;
+	color: var(--text);
+}
+
+.controls {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+.btn {
+	background: rgba(255,255,255,0.08);
+	border: 1px solid rgba(255,255,255,0.12);
+	color: var(--text);
+	padding: 6px 10px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+.badge {
+	background: rgba(79, 209, 197, 0.15);
+	color: var(--accent);
+	border: 1px solid rgba(79, 209, 197, 0.25);
+	padding: 2px 6px;
+	border-radius: 6px;
+	font-size: 11px;
+}
+
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+

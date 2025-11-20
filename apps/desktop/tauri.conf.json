@@ -1,0 +1,38 @@
+{
+  "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/v2/tooling/cli/schema.json",
+  "productName": "Sales Assistant",
+  "version": "0.1.0",
+  "identifier": "com.sales.assistant",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Sales Assistant",
+        "width": 460,
+        "height": 480,
+        "resizable": true,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visible": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: data: https://*"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["dmg"],
+    "macOS": {
+      "entitlements": null,
+      "exceptionDomain": "localhost",
+      "signingIdentity": null,
+      "providerShortName": null
+    }
+  }
+}
