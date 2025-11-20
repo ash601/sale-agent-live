@@ -80,6 +80,12 @@
       color: #4CAF50;
       font-weight: bold;
     }
+    .speaker.you {
+      color: #4CAF50;
+    }
+    .speaker.customer {
+      color: #2196F3;
+    }
     .other {
       color: #ff9800;
     }
@@ -88,12 +94,31 @@
 <body>
   <div class="container">
     <h1>Sales Agent - Simple</h1>
-    <div style="margin: 15px 0; display: flex; align-items: center; gap: 10px;">
-      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-        <input type="checkbox" id="realtimeMode" style="width: 18px; height: 18px; cursor: pointer;">
-        <span>Realtime API Mode (Faster, ~300-800ms)</span>
-      </label>
-      <span style="color: #888; font-size: 12px;" id="modeStatus">Current: Simple Mode</span>
+    <div style="margin: 15px 0; display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="realtimeMode" style="width: 18px; height: 18px; cursor: pointer;">
+          <span>Realtime API Mode (Faster, ~300-800ms)</span>
+        </label>
+        <span style="color: #888; font-size: 12px;" id="modeStatus">Current: Simple Mode</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="dualSpeakerMode" style="width: 18px; height: 18px; cursor: pointer;">
+          <span>Dual Speaker Mode (You + Customer - Deepgram)</span>
+        </label>
+        <span style="color: #888; font-size: 12px;" id="dualSpeakerStatus">Off</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <span>AI Model:</span>
+          <select id="aiModel" style="padding: 5px 10px; border-radius: 4px; border: 1px solid #555; background: #2a2a2a; color: #fff; cursor: pointer;">
+            <option value="gpt-4-turbo">GPT-4 Turbo (OpenAI)</option>
+            <option value="groq">Groq (Fast)</option>
+          </select>
+        </label>
+        <span style="color: #888; font-size: 12px;" id="modelStatus">GPT-4 Turbo</span>
+      </div>
     </div>
     <div class="status" id="status">Ready to start</div>
     <button id="startBtn">Start Listening</button>

@@ -12,6 +12,13 @@ let lastTranscript = '';
 let currentMode = 'simple'; // 'simple' or 'realtime'
 let suggestionBuffer = '';
 let responseInProgress = false; // track if AI response is being generated
+let dualSpeakerMode = false; // track if dual speaker mode is enabled
+let sonioxWs = null; // Soniox WebSocket connection
+let audioContext = null; // Web Audio API context for mixing
+let conversationHistory = []; // track conversation for context
+let selectedModel = 'gpt-4-turbo'; // selected AI model
+let lastAISuggestionTranscript = ''; // prevent duplicate requests
+let aiRequestTimeout = null; // debounce timer
 
 // what: get current mode from checkbox
 // input: none
@@ -31,6 +38,47 @@ function updateModeStatus() {
     statusEl.style.color = '#4CAF50';
   } else {
     statusEl.textContent = 'Current: Simple Mode (Reliable)';
+    statusEl.style.color = '#888';
+  }
+  
+  // what: update dual speaker mode status
+  // input: none
+  // return: updates dual speaker status
+  const dualSpeakerEl = document.getElementById('dualSpeakerStatus');
+  if (dualSpeakerMode) {
+    dualSpeakerEl.textContent = 'On (Deepgram)';
+    dualSpeakerEl.style.color = '#4CAF50';
+  } else {
+    dualSpeakerEl.textContent = 'Off';
+    dualSpeakerEl.style.color = '#888';
+  }
+}
+
+// what: get dual speaker mode from checkbox
+// input: none
+// return: boolean
+function getDualSpeakerMode() {
+  return document.getElementById('dualSpeakerMode').checked;
+}
+
+// what: get selected AI model
+// input: none
+// return: model name
+function getSelectedModel() {
+  return document.getElementById('aiModel').value;
+}
+
+// what: update model status display
+// input: none
+// return: updates model status text
+function updateModelStatus() {
+  const model = getSelectedModel();
+  const statusEl = document.getElementById('modelStatus');
+  if (model === 'groq') {
+    statusEl.textContent = 'Groq (Fast)';
+    statusEl.style.color = '#4CAF50';
+  } else {
+    statusEl.textContent = 'GPT-4 Turbo';
     statusEl.style.color = '#888';
   }
 }
@@ -478,32 +526,238 @@ async function connectRealtime(stream) {
   }
 }
 
+// what: connect to Deepgram for dual speaker diarization
+// input: audio MediaStream
+// return: connects and starts streaming
+async function connectSoniox(stream) {
+  try {
+    updateStatus('Connecting to Deepgram...');
+    
+    // what: create WebSocket connection to backend
+    // input: WebSocket URL
+    // return: WebSocket connection
+    const wsUrl = 'ws://localhost:8787/diarization/stream';
+    sonioxWs = new WebSocket(wsUrl);
+    
+    sonioxWs.onopen = () => {
+      console.log('Deepgram WebSocket connected');
+      updateStatus('Deepgram connected. Starting audio stream...', 'connected');
+      
+      // what: start streaming audio to Deepgram
+      // input: audio stream
+      // return: processes audio and sends chunks
+      audioContext = new AudioContext({ sampleRate: 16000 });
+      const source = audioContext.createMediaStreamSource(stream);
+      const processor = audioContext.createScriptProcessor(4096, 1, 1);
+      
+      let audioChunkCount = 0;
+      processor.onaudioprocess = (event) => {
+        if (sonioxWs && sonioxWs.readyState === WebSocket.OPEN) {
+          const inputData = event.inputBuffer.getChannelData(0);
+          // what: convert Float32Array to Int16Array for Deepgram
+          // input: Float32 audio data
+          // return: Int16 PCM data
+          const int16Data = new Int16Array(inputData.length);
+          for (let i = 0; i < inputData.length; i++) {
+            const s = Math.max(-1, Math.min(1, inputData[i]));
+            int16Data[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+          }
+          sonioxWs.send(int16Data.buffer);
+          audioChunkCount++;
+          if (audioChunkCount % 100 === 0) {
+            console.log(`Sent ${audioChunkCount} audio chunks to backend`);
+          }
+        } else {
+          console.warn('Backend WebSocket not ready, state:', sonioxWs?.readyState);
+        }
+      };
+      
+      source.connect(processor);
+      processor.connect(audioContext.destination);
+      
+      updateStatus('Listening to both speakers...', 'connected');
+    };
+    
+    sonioxWs.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        console.log('Received message from backend:', msg);
+        
+        // what: handle error messages from backend
+        // input: error message
+        // return: displays error to user
+        if (msg.type === 'error') {
+          console.error('Backend error:', msg.message);
+          updateStatus(`Error: ${msg.message}`, 'error');
+          return;
+        }
+        
+        if (msg.type === 'transcript') {
+          console.log('Updating transcript:', { speaker: msg.speaker, text: msg.text, isFinal: msg.isFinal });
+          updateTranscript(msg.speaker, msg.text, msg.isFinal);
+          
+          // what: trigger AI response for customer statements (or you for testing)
+          // input: final transcript from customer or you
+          // return: gets AI suggestion
+          if (msg.isFinal && msg.text.trim()) {
+            // what: respond to customer OR you (for testing when alone)
+            // input: speaker and text
+            // return: triggers AI suggestion
+            if (msg.speaker === 'customer') {
+              console.log('Customer statement detected, getting AI suggestion...');
+              getAISuggestion(msg.text, 'customer');
+            } else if (msg.speaker === 'you' && msg.text.trim().length > 10) {
+              // what: test mode - respond to your own questions for testing
+              // input: your transcript
+              // return: gets AI suggestion as if you were customer
+              console.log('Your statement detected (test mode), getting AI suggestion...');
+              getAISuggestion(msg.text, 'customer'); // Treat as customer for testing
+            }
+          }
+        } else {
+          console.log('Unknown message type from backend:', msg);
+        }
+      } catch (error) {
+        console.error('Soniox message error:', error);
+        console.error('Raw message:', event.data);
+      }
+    };
+    
+    sonioxWs.onerror = (error) => {
+      console.error('Soniox WebSocket error:', error);
+      updateStatus('Soniox connection error - Check console and ensure SONIOX_API_KEY is set', 'error');
+    };
+    
+    sonioxWs.onclose = (event) => {
+      console.log('Soniox WebSocket closed', event.code, event.reason);
+      if (event.code !== 1000) {
+        console.error('Unexpected close:', event.code, event.reason);
+        updateStatus(`Connection closed: ${event.code} ${event.reason || 'Unknown reason'}`, 'error');
+      }
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+    };
+    
+  } catch (error) {
+    console.error('Soniox connection error:', error);
+    updateStatus(`Error: ${error.message}`, 'error');
+    throw error;
+  }
+}
+
+// what: capture audio with system audio support (BlackHole)
+// input: none
+// return: mixed audio stream
+async function captureDualAudio() {
+  try {
+    // what: enumerate audio devices to find BlackHole
+    // input: none
+    // return: list of audio devices
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const blackhole = devices.find(d => 
+      d.kind === 'audioinput' && 
+      (d.label.toLowerCase().includes('blackhole') || d.label.toLowerCase().includes('black hole'))
+    );
+    
+    // what: get microphone stream
+    // input: audio constraints
+    // return: microphone MediaStream
+    const micStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        sampleRate: 16000,
+        channelCount: 1
+      }
+    });
+    
+    // what: create audio context for mixing
+    // input: sample rate
+    // return: AudioContext
+    const ctx = new AudioContext({ sampleRate: 16000 });
+    const micSource = ctx.createMediaStreamSource(micStream);
+    
+    // what: create destination for mixed audio
+    // input: none
+    // return: MediaStreamAudioDestinationNode
+    const destination = ctx.createMediaStreamDestination();
+    micSource.connect(destination);
+    
+    // what: add system audio if BlackHole is available
+    // input: BlackHole device
+    // return: adds system audio to mix
+    if (blackhole) {
+      try {
+        const systemStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            deviceId: { exact: blackhole.deviceId },
+            sampleRate: 16000,
+            channelCount: 1
+          }
+        });
+        const systemSource = ctx.createMediaStreamSource(systemStream);
+        systemSource.connect(destination);
+        updateStatus('System audio captured (BlackHole)', 'connected');
+      } catch (error) {
+        console.warn('Could not capture system audio:', error);
+        updateStatus('Warning: System audio not available. Using microphone only.', 'error');
+      }
+    } else {
+      updateStatus('Warning: BlackHole not found. Install BlackHole for system audio capture.', 'error');
+    }
+    
+    return destination.stream;
+    
+  } catch (error) {
+    console.error('Audio capture error:', error);
+    throw error;
+  }
+}
+
 // what: start listening with selected mode
 // input: none
 // return: starts audio capture and transcription
 async function startListening() {
   try {
     currentMode = getMode();
+    dualSpeakerMode = getDualSpeakerMode();
     updateStatus('Requesting microphone access...');
     
-    // what: get user media (mic)
-    // input: audio constraints
+    // what: get audio stream based on mode
+    // input: mode selection
     // return: MediaStream
-    mediaStream = await navigator.mediaDevices.getUserMedia({ 
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        sampleRate: currentMode === 'realtime' ? 24000 : 16000,
-        channelCount: 1
-      } 
-    });
+    if (dualSpeakerMode) {
+      // what: capture dual audio (mic + system)
+      // input: none
+      // return: mixed audio stream
+      mediaStream = await captureDualAudio();
+    } else {
+      // what: get user media (mic only)
+      // input: audio constraints
+      // return: MediaStream
+      mediaStream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: currentMode === 'realtime' ? 24000 : 16000,
+          channelCount: 1
+        } 
+      });
+    }
     
     isListening = true;
     document.getElementById('startBtn').disabled = true;
     document.getElementById('stopBtn').disabled = false;
     document.getElementById('realtimeMode').disabled = true;
+    document.getElementById('dualSpeakerMode').disabled = true;
+    document.getElementById('aiModel').disabled = true;
     
-    if (currentMode === 'realtime') {
+    if (dualSpeakerMode) {
+      updateStatus('Starting dual speaker transcription...');
+      await connectSoniox(mediaStream);
+    } else if (currentMode === 'realtime') {
       updateStatus('Microphone active. Connecting to Realtime API...');
       await connectRealtime(mediaStream);
     } else {
@@ -528,6 +782,12 @@ function stopListening() {
   lastTranscript = '';
   suggestionBuffer = '';
   responseInProgress = false; // reset response flag
+  conversationHistory = []; // clear conversation history
+  lastAISuggestionTranscript = ''; // reset duplicate prevention
+  if (aiRequestTimeout) {
+    clearTimeout(aiRequestTimeout);
+    aiRequestTimeout = null;
+  }
   
   // what: stop recognition in both modes (used in Realtime mode for user transcription)
   // input: none
@@ -535,6 +795,19 @@ function stopListening() {
   if (recognition) {
     recognition.stop();
     recognition = null;
+  }
+  
+  // what: close Soniox connection
+  // input: none
+  // return: closes WebSocket and audio context
+  if (sonioxWs) {
+    sonioxWs.close();
+    sonioxWs = null;
+  }
+  
+  if (audioContext) {
+    audioContext.close();
+    audioContext = null;
   }
   
   if (currentMode === 'realtime') {
@@ -556,6 +829,8 @@ function stopListening() {
   document.getElementById('startBtn').disabled = false;
   document.getElementById('stopBtn').disabled = true;
   document.getElementById('realtimeMode').disabled = false;
+  document.getElementById('dualSpeakerMode').disabled = false;
+  document.getElementById('aiModel').disabled = false;
   updateStatus('Stopped');
   document.getElementById('suggestion').textContent = 'Waiting for conversation...';
 }
@@ -565,53 +840,161 @@ function stopListening() {
 // return: updates DOM
 function updateTranscript(speaker, text, isFinal) {
   const transcriptDiv = document.getElementById('transcript');
-  const className = speaker === 'You' ? 'speaker' : 'other';
+  // what: map speaker labels for dual speaker mode
+  // input: speaker label
+  // return: display label and CSS class
+  let displaySpeaker = speaker;
+  let className = 'speaker';
+  
+  if (dualSpeakerMode) {
+    if (speaker === 'you') {
+      displaySpeaker = 'You';
+      className = 'speaker you';
+    } else if (speaker === 'customer') {
+      displaySpeaker = 'Customer';
+      className = 'speaker customer';
+    } else {
+      displaySpeaker = speaker === 'You' ? 'You' : 'Customer';
+      className = speaker === 'You' ? 'speaker you' : 'speaker customer';
+    }
+  } else {
+    className = speaker === 'You' ? 'speaker' : 'other';
+  }
   
   // what: update last line if interim, or add new line if final
   // input: transcript state
   // return: updates display
   const lastDiv = transcriptDiv.querySelector('div:last-child');
-  if (lastDiv && !isFinal && lastDiv.classList.contains(className)) {
-    lastDiv.innerHTML = `<strong>${speaker}:</strong> ${text} <span style="color:#888">(listening...)</span>`;
+  if (lastDiv && !isFinal && lastDiv.classList.contains(className.split(' ')[0])) {
+    lastDiv.innerHTML = `<strong>${displaySpeaker}:</strong> ${text} <span style="color:#888">(listening...)</span>`;
   } else {
     if (lastDiv && !isFinal) {
       lastDiv.remove();
     }
-    transcriptDiv.innerHTML += `<div class="${className}"><strong>${speaker}:</strong> ${text}${isFinal ? '' : ' <span style="color:#888">(listening...)</span>'}</div>`;
+    transcriptDiv.innerHTML += `<div class="${className}"><strong>${displaySpeaker}:</strong> ${text}${isFinal ? '' : ' <span style="color:#888">(listening...)</span>'}</div>`;
   }
   transcriptDiv.scrollTop = transcriptDiv.scrollHeight;
+  
+  // what: add to conversation history for context
+  // input: speaker, text, isFinal
+  // return: updates conversation history
+  if (isFinal && dualSpeakerMode) {
+    const speakerKey = speaker === 'you' || speaker === 'You' ? 'you' : 'customer';
+    conversationHistory.push({
+      speaker: speakerKey,
+      text: text,
+      timestamp: Date.now()
+    });
+    // what: keep only last 20 messages for context
+    // input: conversation history
+    // return: limits history size
+    if (conversationHistory.length > 20) {
+      conversationHistory.shift();
+    }
+  }
 }
 
-// what: get AI suggestion (Simple Mode only)
-// input: transcript text
+// what: get AI suggestion (Simple Mode or Dual Speaker Mode)
+// input: transcript text, speaker
 // return: updates suggestion div with AI response
-async function getAISuggestion(transcript) {
+async function getAISuggestion(transcript, speaker = 'you') {
   try {
-    document.getElementById('suggestion').textContent = 'Thinking...';
-    
-    // what: call backend for AI response
-    // input: POST /ai/respond with transcript
-    // return: suggestion text
-    const response = await fetch(`${API_URL}/ai/respond`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ transcript, context: '' })
-    });
-    
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(error || 'AI response failed');
+    // what: prevent duplicate requests and concurrent calls
+    // input: transcript, speaker
+    // return: skips if duplicate or request in progress
+    if (responseInProgress) {
+      console.log('AI request already in progress, skipping duplicate');
+      return;
     }
     
-    const data = await response.json();
-    const suggestion = data.suggestion || 'No suggestion available';
-    document.getElementById('suggestion').textContent = suggestion;
-    updateStatus('Response received', 'connected');
+    // what: prevent duplicate transcript requests
+    // input: transcript
+    // return: skips if same transcript
+    const requestKey = `${speaker}:${transcript}`;
+    if (requestKey === lastAISuggestionTranscript) {
+      console.log('Duplicate transcript request, skipping');
+      return;
+    }
+    
+    // what: debounce rapid requests (wait 500ms)
+    // input: none
+    // return: clears previous timeout
+    if (aiRequestTimeout) {
+      clearTimeout(aiRequestTimeout);
+    }
+    
+    aiRequestTimeout = setTimeout(async () => {
+      responseInProgress = true;
+      lastAISuggestionTranscript = requestKey;
+      
+      try {
+        console.log('getAISuggestion called:', { transcript: transcript.substring(0, 50), speaker, model: getSelectedModel() });
+        document.getElementById('suggestion').textContent = 'Thinking...';
+        
+        // what: call backend for AI response
+        // input: POST /ai/respond with transcript, speaker, conversation
+        // return: suggestion text
+        const requestBody = { 
+          transcript, 
+          speaker: dualSpeakerMode ? speaker : 'you',
+          context: '',
+          conversation: dualSpeakerMode ? conversationHistory.slice(-10) : [], // last 10 messages for context
+          model: getSelectedModel() // pass selected model
+        };
+        console.log('Sending AI request:', requestBody);
+        
+        const response = await fetch(`${API_URL}/ai/respond`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          let errorMessage;
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.error || errorText;
+          } catch {
+            errorMessage = errorText;
+          }
+          
+          console.error('AI response error:', response.status, errorMessage);
+          
+          // what: handle rate limit errors gracefully
+          // input: response status
+          // return: user-friendly error message
+          if (response.status === 429) {
+            throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+          } else if (response.status === 401) {
+            throw new Error('API key invalid or expired. Please check your API key in .env file.');
+          }
+          throw new Error(errorMessage || 'AI response failed');
+        }
+        
+        const data = await response.json();
+        console.log('AI response received:', data);
+        const suggestion = data.suggestion || '';
+        if (suggestion && !suggestion.startsWith('Error:')) {
+          document.getElementById('suggestion').textContent = suggestion;
+          updateStatus('Response received', 'connected');
+        } else {
+          // No response needed (e.g., you spoke, not customer)
+          console.log('Empty suggestion received - backend returned no response');
+          document.getElementById('suggestion').textContent = 'Waiting for customer question...';
+        }
+      } catch (error) {
+        console.error('AI suggestion error:', error);
+        document.getElementById('suggestion').textContent = `Error: ${error.message}`;
+        updateStatus(`Error: ${error.message}`, 'error');
+      } finally {
+        responseInProgress = false;
+      }
+    }, 500); // 500ms debounce
     
   } catch (error) {
     console.error('AI suggestion error:', error);
-    document.getElementById('suggestion').textContent = `Error: ${error.message}`;
-    updateStatus(`Error: ${error.message}`, 'error');
+    responseInProgress = false;
   }
 }
 
@@ -646,7 +1029,22 @@ document.getElementById('realtimeMode').addEventListener('change', () => {
   }
 });
 
+document.getElementById('dualSpeakerMode').addEventListener('change', () => {
+  if (!isListening) {
+    dualSpeakerMode = getDualSpeakerMode();
+    updateModeStatus();
+  }
+});
+
+document.getElementById('aiModel').addEventListener('change', () => {
+  if (!isListening) {
+    selectedModel = getSelectedModel();
+    updateModelStatus();
+  }
+});
+
 // what: initialize mode status on load
 // input: none
 // return: sets initial mode status
 updateModeStatus();
+updateModelStatus();

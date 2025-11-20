@@ -1,0 +1,227 @@
+[2025-11-20T09:58:17.681Z] Connecting to Soniox...
+[2025-11-20T09:58:17.835Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T09:58:17.839Z] Soniox WebSocket closed: 1006 
+[2025-11-20T09:58:20.844Z] Connecting to Soniox...
+[2025-11-20T09:58:21.032Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T09:58:21.033Z] Soniox WebSocket closed: 1006 
+[2025-11-20T09:59:12.176Z] Connecting to Soniox...
+[2025-11-20T09:59:12.392Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T09:59:12.395Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:03:46.361Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:03:46.535Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:03:46.540Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:04:11.756Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:04:11.910Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:04:11.910Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:04:14.543Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:04:14.681Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:04:14.682Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:08:25.405Z] Fetching temporary API key...
+[2025-11-20T10:08:25.415Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:08:25.610Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:08:25.624Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:08:26.579Z] Error fetching temporary key: Failed to get temporary key: 404 
+[2025-11-20T10:08:26.580Z] Setup error: Failed to get temporary key: 404 
+[2025-11-20T10:08:26.580Z] Soniox WebSocket error: Failed to get temporary key: 404 
+[2025-11-20T10:08:29.631Z] Fetching temporary API key...
+[2025-11-20T10:08:29.634Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:08:29.794Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:08:29.794Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:08:30.870Z] Error fetching temporary key: Failed to get temporary key: 404 
+[2025-11-20T10:08:30.871Z] Setup error: Failed to get temporary key: 404 
+[2025-11-20T10:08:30.871Z] Soniox WebSocket error: Failed to get temporary key: 404 
+[2025-11-20T10:13:03.850Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:13:03.987Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:13:04.001Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:13:54.289Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:13:54.460Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:13:54.476Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:15:34.308Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:15:34.551Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:15:34.554Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:16:13.675Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:16:13.825Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:16:13.830Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:16:25.791Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:16:26.014Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:16:26.015Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:17:31.547Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:17:31.768Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:17:31.768Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:23:27.045Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:23:28.220Z] Soniox unexpected response: 404 Not Found
+[2025-11-20T10:23:28.223Z] Soniox error body: 
+[2025-11-20T10:23:36.319Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:23:36.329Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:23:40.776Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:23:40.987Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:23:40.988Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:23:43.366Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:23:43.553Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:23:43.568Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:26:17.765Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:26:18.071Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:26:18.073Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:26:23.338Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:26:23.542Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:26:23.543Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:26:30.547Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:26:30.762Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:26:30.763Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:26:40.176Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:26:40.402Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:26:40.407Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:26:43.090Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:26:43.370Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:26:43.371Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:26:46.554Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:26:46.841Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:26:46.842Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:27:26.631Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:27:26.816Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:27:26.819Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:30:21.983Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:30:22.247Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:30:22.250Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:35:23.510Z] Connecting to Soniox with key: temp...UEEK
+[2025-11-20T10:35:23.909Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:35:23.914Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:35:28.782Z] Connecting to Soniox with key: temp...ARYX
+[2025-11-20T10:35:29.269Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:35:29.274Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:40:50.993Z] Connecting to Soniox with key: temp...U77R
+[2025-11-20T10:40:51.284Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:40:51.291Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:40:54.799Z] Connecting to Soniox with key: temp...Z2GC
+[2025-11-20T10:40:55.012Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:40:55.013Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:40:57.685Z] Connecting to Soniox with key: temp...B3I3
+[2025-11-20T10:40:57.941Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:40:57.943Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:41:36.333Z] Connecting to Soniox with key: temp...5RPI
+[2025-11-20T10:41:36.546Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:41:36.567Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:41:38.811Z] Connecting to Soniox with key: temp...DXES
+[2025-11-20T10:41:39.019Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:41:39.113Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:48:47.058Z] Connecting to Soniox with key: temp...45RC
+[2025-11-20T10:48:47.313Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:48:47.320Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:49:01.648Z] Connecting to Soniox with key: temp...5BEK
+[2025-11-20T10:49:01.905Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:49:01.910Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:57:07.719Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:57:07.897Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:57:07.945Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:57:10.048Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:57:10.281Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:57:10.303Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:59:03.820Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:59:04.113Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:59:04.116Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:59:04.121Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T10:59:12.806Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T10:59:13.054Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T10:59:13.055Z] Soniox WebSocket closed: 1006 
+[2025-11-20T10:59:13.055Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:01:32.530Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:01:32.839Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:01:32.840Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:01:32.842Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:01:38.830Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:01:39.097Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:01:39.098Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:01:39.099Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:01:44.051Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:01:44.346Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:01:44.346Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:01:44.347Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:04:38.267Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:04:38.552Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:04:38.553Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:04:38.555Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:04:43.851Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:04:44.092Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:04:44.092Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:04:44.093Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:04:55.274Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:04:55.500Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:04:55.501Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:04:55.502Z] Unexpected Soniox close: 1006  - Abnormal closure (no close frame)
+[2025-11-20T11:16:47.952Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:16:48.881Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:16:48.882Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:16:49.269Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:16:49.285Z] Soniox WebSocket closed: 1005 
+[2025-11-20T11:16:49.288Z] Unexpected Soniox close: 1005  - Unknown
+[2025-11-20T11:17:16.535Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:17:17.493Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:17:17.494Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:17:17.890Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:17:17.906Z] Soniox WebSocket closed: 1005 
+[2025-11-20T11:17:17.910Z] Unexpected Soniox close: 1005  - Unknown
+[2025-11-20T11:20:07.398Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:20:07.579Z] Soniox WebSocket error: WebSocket was closed before the connection was established
+[2025-11-20T11:20:07.584Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:21:15.447Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:21:15.618Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:23:43.579Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:23:43.714Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:26:35.145Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:26:35.385Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:26:41.356Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:26:41.562Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:26:51.727Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:26:51.892Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:26:58.249Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:26:58.388Z] Soniox WebSocket closed: 1006 
+[2025-11-20T11:31:13.482Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:31:14.519Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:31:14.522Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:31:14.522Z] Ready to send audio immediately after config
+[2025-11-20T11:31:14.921Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:31:14.921Z] Soniox config acknowledged
+[2025-11-20T11:31:24.534Z] Soniox WebSocket closed: 1000 
+[2025-11-20T11:32:19.265Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:32:20.172Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:32:20.173Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:32:20.174Z] Ready to send audio immediately after config
+[2025-11-20T11:32:20.571Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:32:20.572Z] Soniox config acknowledged
+[2025-11-20T11:32:40.674Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0,"error_code":408,"error_message":"Audio data decode timeout"}
+[2025-11-20T11:32:40.682Z] Soniox API error: 408 Audio data decode timeout
+[2025-11-20T11:32:40.705Z] Soniox WebSocket closed: 1000 
+[2025-11-20T11:32:45.964Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:32:46.985Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:32:46.986Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:32:46.987Z] Ready to send audio immediately after config
+[2025-11-20T11:32:47.362Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:32:47.362Z] Soniox config acknowledged
+[2025-11-20T11:33:07.432Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0,"error_code":408,"error_message":"Audio data decode timeout"}
+[2025-11-20T11:33:07.433Z] Soniox API error: 408 Audio data decode timeout
+[2025-11-20T11:33:07.447Z] Soniox WebSocket closed: 1000 
+[2025-11-20T11:37:29.649Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:37:31.356Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:37:31.357Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:37:31.358Z] Ready to send audio immediately after config
+[2025-11-20T11:37:31.942Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:37:31.943Z] Soniox config acknowledged
+[2025-11-20T11:37:51.986Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0,"error_code":408,"error_message":"Audio data decode timeout"}
+[2025-11-20T11:37:51.986Z] Soniox API error: 408 Audio data decode timeout
+[2025-11-20T11:37:52.014Z] Soniox WebSocket closed: 1000 
+[2025-11-20T11:43:12.816Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:43:13.748Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:43:13.750Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:43:13.750Z] Ready to send audio immediately after config
+[2025-11-20T11:43:14.121Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:43:14.121Z] Soniox config acknowledged
+[2025-11-20T11:43:32.514Z] Soniox WebSocket closed: 1000 
+[2025-11-20T11:43:44.543Z] Connecting to Soniox with key: 11f1...2fab
+[2025-11-20T11:43:45.535Z] Soniox WebSocket connected - sending config immediately
+[2025-11-20T11:43:45.541Z] Config sent: {"api_key":"***","model":"stt-rt-v3","audio_format":"auto","sample_rate":16000,"num_channels":1,"enable_speaker_diarization":true,"enable_language_identification":true,"enable_endpoint_detection":true,"language_hints":["en"]}
+[2025-11-20T11:43:45.541Z] Ready to send audio immediately after config
+[2025-11-20T11:43:45.921Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0}
+[2025-11-20T11:43:45.922Z] Soniox config acknowledged
+[2025-11-20T11:44:05.996Z] Soniox message received: {"tokens":[],"final_audio_proc_ms":0,"total_audio_proc_ms":0,"error_code":408,"error_message":"Audio data decode timeout"}
+[2025-11-20T11:44:05.997Z] Soniox API error: 408 Audio data decode timeout
+[2025-11-20T11:44:06.011Z] Soniox WebSocket closed: 1000 
