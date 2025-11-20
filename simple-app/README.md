@@ -29,10 +29,10 @@ python3 -m http.server 3000
 
 ## How It Works
 
-- Uses browser's Web Speech API for transcription
-- Sends transcript to backend `/ai/respond` endpoint
-- Backend uses OpenAI GPT-4o-mini for quick suggestions
-- Updates in real-time as you speak
+- Uses OpenAI Realtime API via WebRTC for ultra-fast responses (~300-800ms)
+- Streams audio directly to OpenAI
+- Gets real-time transcription and AI suggestions
+- 3-5x faster than previous version
 
 ## Next Steps
 

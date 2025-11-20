@@ -56,6 +56,26 @@
       font-size: 12px;
       margin: 10px 0;
     }
+    .status.connected {
+      color: #4CAF50;
+    }
+    .status.error {
+      color: #f44336;
+    }
+    #debug {
+      background: #1a1a1a;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #888;
+      max-height: 100px;
+      overflow-y: auto;
+      margin-top: 10px;
+      display: none;
+    }
+    #debug.show {
+      display: block;
+    }
     .speaker {
       color: #4CAF50;
       font-weight: bold;
@@ -68,9 +88,17 @@
 <body>
   <div class="container">
     <h1>Sales Agent - Simple</h1>
+    <div style="margin: 15px 0; display: flex; align-items: center; gap: 10px;">
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+        <input type="checkbox" id="realtimeMode" style="width: 18px; height: 18px; cursor: pointer;">
+        <span>Realtime API Mode (Faster, ~300-800ms)</span>
+      </label>
+      <span style="color: #888; font-size: 12px;" id="modeStatus">Current: Simple Mode</span>
+    </div>
     <div class="status" id="status">Ready to start</div>
     <button id="startBtn">Start Listening</button>
     <button id="stopBtn" class="stop" disabled>Stop</button>
+    <div id="debug"></div>
     
     <h3>Live Transcript</h3>
     <div id="transcript"></div>

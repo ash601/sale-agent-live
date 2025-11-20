@@ -25,14 +25,54 @@ app.get('/health', (_req, res) => {
 });
 
 app.post('/realtime/token', async (_req, res) => {
-	// what: provide client secret and endpoint URL for Realtime SDP exchange
+	// what: generate ephemeral client secret and provide SDP URL for Realtime GA API
 	// input: none (later: user auth)
 	// return: {client_secret:{value}, url}
 	const apiKey = process.env.OPENAI_API_KEY;
 	if (!apiKey) return res.status(500).json({ error: 'OPENAI_API_KEY missing' });
-	const model = process.env.OPENAI_REALTIME_MODEL || 'gpt-4o-realtime-preview-2024-12-17';
-	const url = process.env.OPENAI_REALTIME_URL || `https://api.openai.com/v1/realtime?model=${model}`;
-	res.json({ client_secret: { value: apiKey }, url });
+	const model = process.env.OPENAI_REALTIME_MODEL || 'gpt-realtime';
+	
+	try {
+		// what: create ephemeral client secret using GA API
+		// input: POST /v1/realtime/client_secrets
+		// return: ephemeral key
+		const sessionConfig = JSON.stringify({
+			session: {
+				type: 'realtime',
+				model: model,
+				audio: {
+					output: { voice: 'alloy' }
+				}
+			}
+		});
+		
+		const secretResp = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${apiKey}`,
+				'Content-Type': 'application/json'
+			},
+			body: sessionConfig
+		});
+		
+		if (!secretResp.ok) {
+			const error = await secretResp.text();
+			throw new Error(`Failed to create client secret: ${error}`);
+		}
+		
+		const secretData = await secretResp.json();
+		const ephemeralKey = secretData.value;
+		
+		// what: SDP exchange URL for GA API
+		// input: model name
+		// return: URL for WebRTC SDP exchange
+		const sdpUrl = `https://api.openai.com/v1/realtime/calls`;
+		
+		res.json({ client_secret: { value: ephemeralKey }, url: sdpUrl });
+	} catch (error) {
+		console.error('Realtime token error:', error);
+		res.status(500).json({ error: String(error.message || error) });
+	}
 });
 
 app.post('/ai/respond', async (req, res) => {
@@ -69,7 +109,11 @@ app.post('/ai/respond', async (req, res) => {
 			})
 		});
 		
-		if (!response.ok) throw new Error('OpenAI API error');
+		if (!response.ok) {
+			const errorText = await response.text();
+			console.error('OpenAI API error:', response.status, errorText);
+			throw new Error(`OpenAI API error: ${response.status}`);
+		}
 		
 		const data = await response.json();
 		const suggestion = data.choices[0]?.message?.content || 'No suggestion';
@@ -77,7 +121,7 @@ app.post('/ai/respond', async (req, res) => {
 		res.json({ suggestion });
 	} catch (error) {
 		console.error('AI respond error:', error);
-		res.status(500).json({ error: String(error) });
+		res.status(500).json({ error: String(error.message || error) });
 	}
 });
 
