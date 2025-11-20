@@ -11,6 +11,7 @@ let isListening = false;
 let lastTranscript = '';
 let currentMode = 'simple'; // 'simple' or 'realtime'
 let suggestionBuffer = '';
+let responseInProgress = false; // track if AI response is being generated
 
 // what: get current mode from checkbox
 // input: none
@@ -161,25 +162,12 @@ async function connectRealtime(stream) {
         const msg = JSON.parse(ev.data);
         console.log('Realtime event:', msg.type, msg); // debug log
         
-        // what: handle input audio buffer committed (THIS IS WHERE TRANSCRIPT COMES)
+        // what: handle input audio buffer committed (legacy - transcripts are null, using Web Speech API instead)
         // input: input_audio_buffer.committed event
-        // return: shows transcript and triggers response
+        // return: logs for debugging (no action needed)
         if (msg.type === 'input_audio_buffer.committed') {
           console.log('FULL EVENT (input_audio_buffer.committed):', JSON.stringify(msg, null, 2));
-          const transcript = extractTranscript(msg);
-          console.log('TRANSCRIPT FROM COMMITTED:', transcript);
-          if (transcript) {
-            updateTranscript('You', transcript, true);
-            setTimeout(() => {
-              if (dc && dc.readyState === 'open') {
-                dc.send(JSON.stringify({
-                  type: 'response.create'
-                }));
-              }
-            }, 200);
-            document.getElementById('suggestion').textContent = 'Thinking...';
-            suggestionBuffer = '';
-          }
+          // Note: Transcripts are always null here, Web Speech API handles transcription
         }
         
         // what: handle conversation item added (official pattern from OpenAI console)
@@ -191,24 +179,8 @@ async function connectRealtime(stream) {
           // input: item with type "message" and content array
           // return: transcript text
           if (msg.item.type === 'message' && Array.isArray(msg.item.content)) {
-            const audioContent = msg.item.content.find(c => c.type === 'input_audio');
-            if (audioContent) {
-              // Transcript might be null here, wait for conversation.item.done
-              const transcript = audioContent.transcript || '';
-              console.log('TRANSCRIPT FROM ITEM.ADDED:', transcript);
-              if (transcript) {
-                updateTranscript('You', transcript, true);
-                setTimeout(() => {
-                  if (dc && dc.readyState === 'open') {
-                    dc.send(JSON.stringify({
-                      type: 'response.create'
-                    }));
-                  }
-                }, 200);
-                document.getElementById('suggestion').textContent = 'Thinking...';
-                suggestionBuffer = '';
-              }
-            }
+            // Note: Transcripts are always null here, Web Speech API handles transcription
+            // This handler only processes AI responses (output_text/output_audio)
           }
           
           // what: extract response text from output_text or output_audio item
@@ -241,23 +213,8 @@ async function connectRealtime(stream) {
           // input: item with type "message" and content array
           // return: transcript text
           if (msg.item.type === 'message' && Array.isArray(msg.item.content)) {
-            const audioContent = msg.item.content.find(c => c.type === 'input_audio');
-            if (audioContent) {
-              const transcript = audioContent.transcript || '';
-              console.log('TRANSCRIPT FROM ITEM.DONE:', transcript);
-              if (transcript) {
-                updateTranscript('You', transcript, true);
-                setTimeout(() => {
-                  if (dc && dc.readyState === 'open') {
-                    dc.send(JSON.stringify({
-                      type: 'response.create'
-                    }));
-                  }
-                }, 200);
-                document.getElementById('suggestion').textContent = 'Thinking...';
-                suggestionBuffer = '';
-              }
-            }
+            // Note: User transcripts are always null here, Web Speech API handles transcription
+            // This handler only processes AI responses (output_text/output_audio)
             
             // what: extract AI response from output_audio or output_text
             // input: message item with assistant content
@@ -351,8 +308,9 @@ async function connectRealtime(stream) {
         
         // what: handle response completion
         // input: response.done event
-        // return: finalizes suggestion
+        // return: finalizes suggestion and clears response flag
         if (msg.type === 'response.done') {
+          responseInProgress = false;
           updateStatus('Response received', 'connected');
         }
         
@@ -376,8 +334,9 @@ async function connectRealtime(stream) {
         
         // what: handle response started
         // input: response.created event
-        // return: shows thinking status
+        // return: shows thinking status and sets response flag
         if (msg.type === 'response.created') {
+          responseInProgress = true;
           document.getElementById('suggestion').textContent = 'Thinking...';
           suggestionBuffer = '';
         }
@@ -479,18 +438,19 @@ async function connectRealtime(stream) {
         
         // what: trigger Realtime AI response when user finishes speaking
         // input: final transcript
-        // return: sends response.create to Realtime API
-        if (isFinal && transcript.trim() && transcript !== lastTranscript) {
+        // return: sends response.create to Realtime API (only if no response in progress)
+        if (isFinal && transcript.trim() && transcript !== lastTranscript && !responseInProgress) {
           lastTranscript = transcript;
           setTimeout(() => {
-            if (dc && dc.readyState === 'open') {
+            if (dc && dc.readyState === 'open' && !responseInProgress) {
+              responseInProgress = true;
               dc.send(JSON.stringify({
                 type: 'response.create'
               }));
+              document.getElementById('suggestion').textContent = 'Thinking...';
+              suggestionBuffer = '';
             }
           }, 200);
-          document.getElementById('suggestion').textContent = 'Thinking...';
-          suggestionBuffer = '';
         }
       };
       
@@ -567,6 +527,7 @@ function stopListening() {
   isListening = false;
   lastTranscript = '';
   suggestionBuffer = '';
+  responseInProgress = false; // reset response flag
   
   // what: stop recognition in both modes (used in Realtime mode for user transcription)
   // input: none
